@@ -3,9 +3,10 @@ import UIKit
 import Photos
 
 public class SwiftFlutterAbsolutePathPlugin: NSObject, FlutterPlugin {
-public static func register(with registrar: FlutterPluginRegistrar) {
+
+  public static func register(with registrar: FlutterPluginRegistrar) {
     let channel = FlutterMethodChannel(name: "flutter_absolute_path", binaryMessenger: registrar.messenger())
-    let instance = SwiftFlutterRealPathPlugin()
+    let instance = SwiftFlutterAbsolutePathPlugin()
     registrar.addMethodCallDelegate(instance, channel: channel)
   }
 
