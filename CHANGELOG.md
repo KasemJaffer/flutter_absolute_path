@@ -1,3 +1,7 @@
+## 1.0.6
+
+* Fix getting path from google photos 
+
 ## 1.0.5
 
 * Fix iOS uri that starts with "file://"
