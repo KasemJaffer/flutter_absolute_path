@@ -16,7 +16,7 @@ public class SwiftFlutterAbsolutePathPlugin: NSObject, FlutterPlugin {
                 result(FlutterError(code: "assertion_error", message: "uri is required.", details: nil))
                 return
             }
-            if (uri.starts(with: "file://")) {
+            if (uri.starts(with: "file://") || uri.starts(with: "/var/mobile/Media") || uri.starts(with: "/private/var/mobile")) {
                 result( uri.replacingOccurrences(of: "file://", with: ""))
                 return
             }
