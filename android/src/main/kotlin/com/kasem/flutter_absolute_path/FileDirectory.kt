@@ -9,7 +9,6 @@ import android.os.Environment
 import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.provider.OpenableColumns
-import com.kasem.flutter_absolute_path.FileDirectory.contentSchemeFileName
 import java.io.*
 import java.util.*
 
@@ -90,8 +89,8 @@ object FileDirectory {
 
         if (uri.authority != null) {
             // try to get file name
-            val filename :String? = null
-            context.contentResolver.query(this, null, null, null, null)?.use { cursor ->
+            var filename :String? = null
+            context.contentResolver.query(uri, null, null, null, null)?.use { cursor ->
                 if (!cursor.moveToFirst()) return@use null
                 val nameColumIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
                 fileName = cursor.getString(nameColumIndex)
