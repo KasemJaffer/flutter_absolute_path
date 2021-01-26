@@ -8,6 +8,7 @@ import android.os.Build
 import android.os.Environment
 import android.provider.DocumentsContract
 import android.provider.MediaStore
+import android.provider.OpenableColumns
 import java.io.*
 import java.util.*
 
@@ -87,7 +88,10 @@ object FileDirectory {
                               selectionArgs: Array<String>?): String? {
 
         if (uri.authority != null) {
-            val targetFile = File(context.cacheDir, "IMG_${Date().time}.png")
+            // try to get file name
+            val filename = uri.contentSchemeFileName()
+
+            val targetFile = File(context.cacheDir, filename ?: "IMG_${Date().time}.png")
             context.contentResolver.openInputStream(uri)?.use { input ->
                 FileOutputStream(targetFile).use { fileOut ->
                     input.copyTo(fileOut)
@@ -136,4 +140,16 @@ object FileDirectory {
     fun isMediaDocument(uri: Uri): Boolean {
         return "com.android.providers.media.documents" == uri.authority
     }
+
+    private fun Uri.contentSchemeFileName(): String? {
+        var fileName: String? = null
+        contentResolver.query(this, null, null, null, null)?.use { cursor ->
+            if (!cursor.moveToFirst()) return@use null
+            val name = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+            fileName = cursor.getString(name)
+            cursor.close()
+        }
+        return fileName
+    }
+
 }
