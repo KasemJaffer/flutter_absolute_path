@@ -93,7 +93,7 @@ object FileDirectory {
             context.contentResolver.query(uri, null, null, null, null)?.use { cursor ->
                 if (!cursor.moveToFirst()) return@use null
                 val nameColumIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
-                fileName = cursor.getString(nameColumIndex)
+                filename = cursor.getString(nameColumIndex)
                 cursor.close()
             }
 
