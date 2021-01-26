@@ -1,4 +1,4 @@
-name: flutter_absolute_path
+name: flutter_absolute_path_fork
 description: A flutter plugin that finds the absolute path of a file in iOS or Android devices.
 version: 1.0.6
 author: Kasem SAEED<kasem.jaffer@gmail.com>
