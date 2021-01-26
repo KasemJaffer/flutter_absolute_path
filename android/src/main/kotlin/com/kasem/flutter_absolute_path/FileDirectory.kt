@@ -9,6 +9,7 @@ import android.os.Environment
 import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.provider.OpenableColumns
+import com.kasem.flutter_absolute_path.FileDirectory.contentSchemeFileName
 import java.io.*
 import java.util.*
 
@@ -89,7 +90,13 @@ object FileDirectory {
 
         if (uri.authority != null) {
             // try to get file name
-            val filename = uri.contentSchemeFileName()
+            val filename :String? = null
+            context.contentResolver.query(this, null, null, null, null)?.use { cursor ->
+                if (!cursor.moveToFirst()) return@use null
+                val nameColumIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+                fileName = cursor.getString(nameColumIndex)
+                cursor.close()
+            }
 
             val targetFile = File(context.cacheDir, filename ?: "IMG_${Date().time}.png")
             context.contentResolver.openInputStream(uri)?.use { input ->
@@ -139,17 +146,6 @@ object FileDirectory {
      */
     fun isMediaDocument(uri: Uri): Boolean {
         return "com.android.providers.media.documents" == uri.authority
-    }
-
-    private fun Uri.contentSchemeFileName(): String? {
-        var fileName: String? = null
-        contentResolver.query(this, null, null, null, null)?.use { cursor ->
-            if (!cursor.moveToFirst()) return@use null
-            val name = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
-            fileName = cursor.getString(name)
-            cursor.close()
-        }
-        return fileName
     }
 
 }
