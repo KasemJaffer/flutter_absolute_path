@@ -1,6 +1,5 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_absolute_path/flutter_absolute_path.dart';
 
 void main() {
   const MethodChannel channel = MethodChannel('flutter_absolute_path');
