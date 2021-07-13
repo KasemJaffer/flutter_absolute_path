@@ -31,25 +31,9 @@ class FlutterAbsolutePathPlugin(private val context: Context) : MethodCallHandle
             call.method == "getAbsolutePath" -> {
                 val uriString = call.argument<Any>("uri") as String
                 val uri = Uri.parse(uriString)
-
-//                val provider = applicationProviders?.firstOrNull { uri.authority == it.authority }
-//                if (provider != null) {
-//                    val folderPath = Environment.getExternalStorageDirectory().path + "/Pictures"
-//                    result.success("$folderPath/${uri.lastPathSegment}")
-//                    return
-//                }
-
-                result.success(FileDirectory.getAbsolutePath(this.context, uri))
+                result.success(FileDirectory.getDataColumn(this.context, uri, null, null))
             }
             else -> result.notImplemented()
         }
     }
-
-//    val applicationProviders: List<ProviderInfo>? by lazy {
-//        val applicationId = context.packageName
-//        context.packageManager
-//                .getInstalledPackages(PackageManager.GET_PROVIDERS)
-//                .firstOrNull { it.packageName == applicationId }
-//                ?.providers?.toList()
-//    }
 }
