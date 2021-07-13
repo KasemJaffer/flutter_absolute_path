@@ -10,6 +10,7 @@ import android.provider.DocumentsContract
 import android.provider.MediaStore
 import java.io.*
 import java.util.*
+import java.io.File
 
 
 object FileDirectory {
@@ -67,6 +68,12 @@ object FileDirectory {
             }// MediaProvider
             // DownloadsProvider
         } else if ("content".equals(uri.scheme, ignoreCase = true)) {
+
+            // Return the remote address
+            // source: https://gist.github.com/chauhan-tarun/15eb908a778ac77835d7433e04f71c16
+            if (isGooglePhotosUri(uri))
+                return uri.getLastPathSegment();
+
             return getDataColumn(context, uri, null, null)
         }
 
@@ -85,16 +92,6 @@ object FileDirectory {
      */
     private fun getDataColumn(context: Context, uri: Uri, selection: String?,
                               selectionArgs: Array<String>?): String? {
-
-        if (uri.authority != null) {
-            val targetFile = File(context.cacheDir, "IMG_${Date().time}.png")
-            context.contentResolver.openInputStream(uri)?.use { input ->
-                FileOutputStream(targetFile).use { fileOut ->
-                    input.copyTo(fileOut)
-                }
-            }
-            return targetFile.path
-        }
 
         var cursor: Cursor? = null
         val column = "_data"
@@ -135,5 +132,13 @@ object FileDirectory {
      */
     fun isMediaDocument(uri: Uri): Boolean {
         return "com.android.providers.media.documents" == uri.authority
+    }
+
+    /**
+     * @param uri The Uri to check.
+     * @return Whether the Uri authority is Google Photos.
+     */
+    fun isGooglePhotosUri(uri: Uri): Boolean {
+        return "com.google.android.apps.photos.content" == uri.authority
     }
 }
