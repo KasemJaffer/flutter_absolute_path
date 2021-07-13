@@ -49,7 +49,7 @@ class FlutterAbsolutePathPlugin : FlutterPlugin, ActivityAware, MethodCallHandle
             call.method == "getAbsolutePath" -> {
                 val uriString = call.argument<Any>("uri") as String
                 val uri = Uri.parse(uriString)
-                result.success(FileDirectory.getDataColumn(this.context, uri, null, null))
+                result.success(FileDirectory.getAbsolutePath(this.context, uri))
             }
             else -> result.notImplemented()
         }

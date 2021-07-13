@@ -30,6 +30,11 @@ class _MyAppState extends State<MyApp> {
             await FlutterAbsolutePath.getAbsolutePath("content://media/external/images/media/41")
         )
     );
+    files.add(
+        File(
+            await FlutterAbsolutePath.getAbsolutePath("content://com.android.providers.media.documents/document/image%3A41")
+        )
+    );
 
     // If the widget was removed from the tree while the asynchronous platform
     // message was in flight, we want to discard the reply rather than calling
