@@ -1,29 +1,47 @@
 package com.kasem.flutter_absolute_path
 
-import android.content.Context
-import android.content.Intent
-import android.net.Uri
-import android.os.Environment
+import io.flutter.embedding.engine.plugins.FlutterPlugin
+import io.flutter.embedding.engine.plugins.activity.ActivityAware
+import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
+import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry.Registrar
-import android.util.Log
-import android.content.pm.ProviderInfo
-import android.content.pm.PackageManager
-import android.content.pm.PackageInfo
-import java.security.Provider
+
+import android.content.Context
+import android.app.Activity
+import android.net.Uri
 
 
-class FlutterAbsolutePathPlugin(private val context: Context) : MethodCallHandler {
+class FlutterAbsolutePathPlugin : FlutterPlugin, ActivityAware, MethodCallHandler{
+    private lateinit var channel : MethodChannel
 
-    companion object {
-        @JvmStatic
-        fun registerWith(registrar: Registrar) {
-            val channel = MethodChannel(registrar.messenger(), "flutter_absolute_path")
-            channel.setMethodCallHandler(FlutterAbsolutePathPlugin(registrar.context()))
-        }
+    private lateinit var context: Context
+    private lateinit var activity: Activity
+
+    override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
+        channel = MethodChannel(flutterPluginBinding.getFlutterEngine().getDartExecutor(), "flutter_absolute_path")
+        channel.setMethodCallHandler(this);
+        context = flutterPluginBinding.applicationContext
+    }
+
+    override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
+        // TODO: your plugin is no longer attached to a Flutter experience.
+    }
+
+    override fun onAttachedToActivity(binding: ActivityPluginBinding) {
+        activity = binding.activity;
+    }
+
+    override fun onDetachedFromActivity() {
+    }
+
+    override fun onDetachedFromActivityForConfigChanges() {
+    }
+
+    override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
     }
 
     override fun onMethodCall(call: MethodCall, result: Result) {
